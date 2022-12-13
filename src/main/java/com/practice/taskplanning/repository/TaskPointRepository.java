@@ -18,7 +18,7 @@ public interface TaskPointRepository extends PagingAndSortingRepository<TaskPoin
     /**
      * Находит все подзадачи, удовлетворяющие заданным параметрам
      *
-     * @param taskId              id задание подзадач
+     * @param taskId              ID задания подзадач
      * @param completed           выполнена ли подзадача
      * @param searchStr           строка, входящая в имя или описание
      * @param hasCreatedDateBegin наличие даты создания, не раньше которой требуются подзадачи

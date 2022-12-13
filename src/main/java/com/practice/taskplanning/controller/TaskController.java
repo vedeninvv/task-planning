@@ -83,7 +83,7 @@ public class TaskController {
                     " or description, start date and end date (year-month-day)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Page of tasks"),
-            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad parameters type or format", content = @Content),
             @ApiResponse(responseCode = "403", description = "Don't have permission to get tasks", content = @Content)
     })
     @PreAuthorize("hasAuthority('task:read')")

@@ -18,8 +18,8 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, L
      * Находит все задания, удовлетворяющие заданным параметрам
      *
      * @param status              статус задания
-     * @param assignedUserId      id назначенного на задание пользователя
-     * @param assignedTeamId      id назначенной на задание команды
+     * @param assignedUserId      ID назначенного на задание пользователя
+     * @param assignedTeamId      ID назначенной на задание команды
      * @param searchStr           строка, входящая в имя или описание
      * @param hasCreatedDateBegin наличие даты создания, не раньше которой требуются задачи
      * @param createdDateBegin    дата создания, не раньше которой требуются задачи
@@ -39,6 +39,14 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, L
                                         String searchStr, boolean hasCreatedDateBegin, Date createdDateBegin,
                                         boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
 
+    /**
+     * Обновляет статусы всех заданий на переданный, текущий статус которых - один из переданного списка статусов, и
+     * крайний срок выполнения - до переданной даты
+     *
+     * @param newStatus          новый статус заданий
+     * @param statusListToUpdate статусы, с которыми нужно обновить задания
+     * @param date               дата, до которой должен находиться крайний срок для обновления
+     */
     @Modifying
     @Query("update TaskEntity task set task.status = :newStatus, task.statusUpdated = :date" +
             "   where (task.status in :statusListToUpdate)" +

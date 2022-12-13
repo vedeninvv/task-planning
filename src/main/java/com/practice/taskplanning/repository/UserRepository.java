@@ -1,7 +1,7 @@
 package com.practice.taskplanning.repository;
 
-import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
+import com.practice.taskplanning.model.user.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
