@@ -45,7 +45,7 @@ public class TaskPointService {
         Date currentDate = new Date();
         taskPoint.setCreatedDate(currentDate);
         taskPoint = taskPointRepository.save(taskPoint);
-        taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, currentDate);
+        taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), currentDate);
         return taskPointMapper.toDto(taskPoint);
     }
 
@@ -81,7 +81,7 @@ public class TaskPointService {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to delete taskPoint", taskPointId));
         });
         taskPointRepository.delete(taskPoint);
-        taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, new Date());
+        taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), new Date());
     }
 
     public TaskPointGetDto completeTaskPoint(AppUser user, Long taskPointId) {
@@ -92,8 +92,7 @@ public class TaskPointService {
             Date currentDate = new Date();
             taskPoint.setCompletedDate(currentDate);
             taskPoint.setCompleted(true);
-            taskPoint = taskPointRepository.save(taskPoint);
-            taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, currentDate);
+            taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), currentDate);
             return taskPointMapper.toDto(taskPoint);
         } else {
             throw new UserNotAssigned(
@@ -118,8 +117,7 @@ public class TaskPointService {
         if (hasAccessToRollback(user, taskPoint)) {
             taskPoint.setCompletedDate(null);
             taskPoint.setCompleted(false);
-            taskPoint = taskPointRepository.save(taskPoint);
-            taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, new Date());
+            taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), new Date());
             return taskPointMapper.toDto(taskPoint);
         } else {
             throw new UserNotAssigned(

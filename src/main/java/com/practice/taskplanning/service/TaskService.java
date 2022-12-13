@@ -116,9 +116,9 @@ public class TaskService {
         taskRepository.deleteById(taskId);
     }
 
-    public void updateTaskStatusWhenTaskPointsChanged(TaskPoint changedTaskPoint, Date currentDate) {
+    public void updateTaskWhenTaskPointsChanged(Task task, Date currentDate) {
         taskRepository.save(
-                changeStatusIfNecessary(changedTaskPoint.getTask(), currentDate)
+                changeStatusIfNecessary(task, currentDate)
         );
     }
 
