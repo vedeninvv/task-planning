@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +39,24 @@ public class TaskController {
     public TaskGetDto updateTask(@PathVariable Long taskId,
                                  @Valid @RequestBody TaskPatchDto taskPatchDto) {
         return taskService.updateTask(taskId, taskPatchDto);
+    }
+
+    @PreAuthorize("hasAuthority('task:read')")
+    @GetMapping("/{taskId}")
+    public TaskGetDto getTaskById(@PathVariable Long taskId) {
+        return taskService.getTaskById(taskId);
+    }
+
+    @PreAuthorize("hasAuthority('task:read')")
+    @GetMapping()
+    public Iterable<TaskGetDto> getAllTasks(@RequestParam(required = false) Status status,
+                                            @RequestParam(required = false) Long assignedUserId,
+                                            @RequestParam(required = false) Long assignedTeamId,
+                                            @RequestParam(required = false) String searchStr,
+                                            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createdDateBegin,
+                                            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createdDateEnd,
+                                            @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return taskService.getAllTasks(status, assignedUserId, assignedTeamId, searchStr,
+                createdDateBegin, createdDateEnd, pageable);
     }
 }

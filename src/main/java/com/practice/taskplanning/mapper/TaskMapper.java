@@ -27,6 +27,8 @@ public interface TaskMapper {
     @Mapping(target = "assignedTeamsIds", source = "assignedTeams")
     TaskGetDto toDto(Task task);
 
+    Iterable<TaskGetDto> toDto(Iterable<Task> tasks);
+
     default Set<Long> getAssignedUsersId(Set<AppUser> assignedUsers) {
         return assignedUsers.stream().map(AppUser::getId).collect(Collectors.toSet());
     }

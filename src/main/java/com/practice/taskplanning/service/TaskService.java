@@ -13,10 +13,16 @@ import com.practice.taskplanning.repository.TaskRepository;
 import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 @Service
 public class TaskService {
@@ -55,6 +61,27 @@ public class TaskService {
         changeStatusIfNecessary(task, currentDate);
 
         return taskMapper.toDto(taskRepository.save(task));
+    }
+
+    public TaskGetDto getTaskById(Long taskId) {
+        return taskMapper.toDto(
+                taskRepository.findById(taskId).orElseThrow(() -> {
+                    throw new NotFoundException(String.format("Task with id '%d' not found when try to get task", taskId));
+                })
+        );
+    }
+
+    public Iterable<TaskGetDto> getAllTasks(Status status, Long assignedUserId, Long assignedTeamId, String searchStr,
+                                            Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
+        searchStr = searchStr != null ? searchStr.toLowerCase(Locale.ROOT) : searchStr;
+        createdDateBegin = createdDateBegin != null ? createdDateBegin : new Date(0);
+        createdDateEnd = createdDateEnd != null ? createdDateEnd : new GregorianCalendar(10000, Calendar.FEBRUARY, 1).getTime();
+        try {
+            return taskMapper.toDto(taskRepository.findAllWithFilters(status, assignedUserId, assignedTeamId,
+                    searchStr, createdDateBegin, createdDateEnd, pageable));
+        } catch (InvalidDataAccessApiUsageException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
+        }
     }
 
     public TaskGetDto updateTask(Long taskId, TaskPatchDto taskPatchDto) {
