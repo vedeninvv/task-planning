@@ -1,5 +1,6 @@
 package com.practice.taskplanning.model;
 
+import com.practice.taskplanning.model.task.TaskEntity;
 import com.practice.taskplanning.model.user.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,12 @@ public class TeamEntity {
      * Название команды
      */
     private String name;
+
+    /**
+     * Задания, на которые назначена команда
+     */
+    @ManyToMany(mappedBy = "assignedTeams")
+    private Set<TaskEntity> tasksAssignedTo;
 
     /**
      * Участники команды

@@ -1,5 +1,7 @@
 package com.practice.taskplanning.model.user;
 
+import com.practice.taskplanning.model.TeamEntity;
+import com.practice.taskplanning.model.task.TaskEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -43,6 +45,18 @@ public class UserEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles = new HashSet<>();
+
+    /**
+     * Задания, на которые назначен пользователь
+     */
+    @ManyToMany(mappedBy = "assignedUsers")
+    private Set<TaskEntity> tasksAssignedTo;
+
+    /**
+     * Команды, в которых состоит пользователь
+     */
+    @ManyToMany(mappedBy = "members")
+    private Set<TeamEntity> teams;
 
     /**
      * Получить разрешения пользователя в зависимости от его ролей
