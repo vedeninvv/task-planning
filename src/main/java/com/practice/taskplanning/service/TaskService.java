@@ -20,6 +20,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -234,7 +235,11 @@ public class TaskService {
     }
 
     @Transactional
+    @Scheduled(cron = "@daily")
     public void updatingTaskStatusIfDeadlineOverdue() {
-        taskRepository.updateTaskStatusIfDeadlineOverdue(Status.DATE_EXPIRED, List.of(Status.CREATED, Status.ASSIGNED));
+        taskRepository.updateStatusIfCurrentInListAndDeadlineBeforeDate(
+                Status.DATE_EXPIRED,
+                List.of(Status.CREATED, Status.ASSIGNED),
+                new Date());
     }
 }

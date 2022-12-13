@@ -40,8 +40,8 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, L
                                         boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
 
     @Modifying
-    @Query("update TaskEntity task set task.status = :newStatus, task.statusUpdated = current_date" +
+    @Query("update TaskEntity task set task.status = :newStatus, task.statusUpdated = :date" +
             "   where (task.status in :statusListToUpdate)" +
-            "   and (task.deadline > current_date )")
-    void updateTaskStatusIfDeadlineOverdue(Status newStatus, List<Status> statusListToUpdate);
+            "   and (task.deadline < :date )")
+    void updateStatusIfCurrentInListAndDeadlineBeforeDate(Status newStatus, List<Status> statusListToUpdate, Date date);
 }
