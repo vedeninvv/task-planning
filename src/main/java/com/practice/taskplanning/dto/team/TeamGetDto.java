@@ -8,6 +8,14 @@ import java.util.List;
 @Data
 public class TeamGetDto {
     private Long id;
+
+    /**
+     * Название команды
+     */
     private String name;
+
+    /**
+     * Список пользователей-участников команды
+     */
     private List<UserGetDto> userGetDtos;
 }

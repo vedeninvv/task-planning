@@ -10,14 +10,23 @@ import java.util.Set;
 
 @Data
 public class UserPostDto {
+    /**
+     * Имя пользователя (логин)
+     */
     @NotNull
     @Size(min = 5, max = 40)
     private String username;
 
+    /**
+     * Пароль пользователя
+     */
     @NotNull
     @Size(min = 5, max = 40)
     private String password;
 
+    /**
+     * Множество ролей пользователя
+     */
     @NotEmpty(message = "User must have at least one role")
     private Set<Role> roles;
 }

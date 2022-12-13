@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Сущность роли пользователя
+ */
 @Entity
 @Getter
 @Setter

@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Команда - группа пользователей, которых можно назначить на задание
+ */
 @Entity
 @Table(name = "team")
 @Getter

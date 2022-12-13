@@ -8,9 +8,15 @@ import java.util.Set;
 
 @Data
 public class TeamPostDto {
+    /**
+     * Название команды
+     */
     @Size(max = 40)
     @NotBlank
     private String name;
 
+    /**
+     * Множество ID пользователей-участников команды
+     */
     private Set<Long> memberIds;
 }

@@ -9,17 +9,35 @@ import java.util.Set;
 
 @Data
 public class TaskPatchDto {
+    /**
+     * Краткое имя задания
+     */
     @Size(max = 40)
     private String name;
 
+    /**
+     * Подробное описание задания
+     */
     private String description;
 
+    /**
+     * Крайний срок выполнения задания
+     */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
+    /**
+     * Множество ID подзадач задания
+     */
     private Set<Long> taskPointsIds;
 
+    /**
+     * Множество ID пользователей, назначенных на задания
+     */
     private Set<Long> assignedUsersIds;
 
+    /**
+     * Множество ID команд, назначенных на задания
+     */
     private Set<Long> assignedTeamsIds;
 }

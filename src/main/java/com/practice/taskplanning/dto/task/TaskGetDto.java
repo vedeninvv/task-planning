@@ -14,25 +14,52 @@ import java.util.Set;
 public class TaskGetDto {
     private Long id;
 
+    /**
+     * Краткое имя задания
+     */
     private String name;
 
+    /**
+     * Подробное описание задания
+     */
     private String description;
 
+    /**
+     * Дата создания задания
+     */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
 
+    /**
+     * Текущий статус задания
+     */
     private Status status;
 
+    /**
+     * Дата последнего обновления статуса
+     */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date statusUpdated;
 
+    /**
+     * Крайний срок выполнения задания
+     */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
+    /**
+     * Подзадачи задания
+     */
     @JsonProperty("taskPoints")
     private Set<TaskPointGetDto> taskPointGetDtos = new HashSet<>();
 
+    /**
+     * Множество ID пользователей, назначенных на задания
+     */
     private Set<Long> assignedUsersIds = new HashSet<>();
 
+    /**
+     * Множество ID команд, назначенных на задания
+     */
     private Set<Long> assignedTeamsIds = new HashSet<>();
 }

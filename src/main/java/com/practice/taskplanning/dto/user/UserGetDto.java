@@ -8,6 +8,14 @@ import java.util.Set;
 @Data
 public class UserGetDto {
     private Long id;
+
+    /**
+     * Имя пользователя (логин)
+     */
     private String username;
+
+    /**
+     * Множество ролей пользователя
+     */
     private Set<Role> roles;
 }

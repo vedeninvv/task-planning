@@ -1,6 +1,5 @@
 package com.practice.taskplanning.dto.task;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
 import lombok.Data;
@@ -14,21 +13,39 @@ import java.util.Set;
 
 @Data
 public class TaskPostDto {
+    /**
+     * Краткое имя задания
+     */
     @NotBlank
     @Size(max = 40)
     private String name;
 
+    /**
+     * Подробное описание задания
+     */
     @NotBlank
     private String description;
 
+    /**
+     * Крайний срок выполнения задания
+     */
     @Future
     private Date deadline;
 
+    /**
+     * Подзадачи задания
+     */
     @JsonProperty("taskPoints")
     @NotEmpty
     private Set<TaskPointPostDto> taskPointPostDtos;
 
+    /**
+     * Множество ID пользователей, назначенных на задания
+     */
     private Set<Long> assignedUsersIds;
 
+    /**
+     * Множество ID команд, назначенных на задания
+     */
     private Set<Long> assignedTeamsIds;
 }

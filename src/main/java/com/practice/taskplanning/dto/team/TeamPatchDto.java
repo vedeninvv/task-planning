@@ -7,8 +7,14 @@ import java.util.Set;
 
 @Data
 public class TeamPatchDto {
+    /**
+     * Название команды
+     */
     @Size(max = 40)
     private String name;
 
+    /**
+     * Множество ID пользователей-участников команды
+     */
     private Set<Long> memberIds;
 }
