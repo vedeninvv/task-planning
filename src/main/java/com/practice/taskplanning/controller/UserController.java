@@ -51,7 +51,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
             @ApiResponse(responseCode = "403", description = "Don't have permission to users", content = @Content)
     })
-    @PreAuthorize("hasAuthority('user:all')")
+    @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping("/id/{userId}")
     UserGetDto getUserById(@PathVariable Long userId) {
         return userService.getUserById(userId);
@@ -63,7 +63,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
             @ApiResponse(responseCode = "403", description = "Don't have permission to users", content = @Content)
     })
-    @PreAuthorize("hasAuthority('user:all')")
+    @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping("/{username}")
     UserGetDto getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
@@ -75,7 +75,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid role", content = @Content),
             @ApiResponse(responseCode = "403", description = "Don't have permission to users", content = @Content)
     })
-    @PreAuthorize("hasAuthority('user:all')")
+    @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping
     Iterable<UserGetDto> getAllUsers(@RequestParam(required = false) Role role,
                                      @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -90,7 +90,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid data or username already exists", content = @Content),
             @ApiResponse(responseCode = "403", description = "Not admin or not this user", content = @Content)
     })
-    @PreAuthorize("hasAuthority('user:all') and (hasRole('ADMIN') or #user.id == #userId)")
+    @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @PatchMapping("/{userId}")
     UserGetDto updateUser(@PathVariable Long userId,
                           @RequestBody @Valid UserPatchDto userPatchDto,
@@ -106,7 +106,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
             @ApiResponse(responseCode = "403", description = "Not admin or not this user", content = @Content)
     })
-    @PreAuthorize("hasAuthority('user:all') and (hasRole('ADMIN') or #user.id == #userId)")
+    @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @DeleteMapping("/{userId}")
     void deleteUser(@PathVariable Long userId,
                     @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {

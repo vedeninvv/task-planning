@@ -1,7 +1,9 @@
 package com.practice.taskplanning.model.user;
 
 public enum Permission {
-    USER_ALL("user:all"),
+    USER_READ_ALL("user:read:all"),
+    USER_WRITE_SELF("user:write:self"),
+    USER_WRITE_ALL("user:write:all"),
     TEAM_WRITE("team:write"),
     TEAM_READ("team:read"),
     TASK_WRITE("task:write"),
