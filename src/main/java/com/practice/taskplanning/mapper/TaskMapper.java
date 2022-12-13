@@ -1,12 +1,14 @@
 package com.practice.taskplanning.mapper;
 
 import com.practice.taskplanning.dto.task.TaskGetDto;
+import com.practice.taskplanning.dto.task.TaskPatchDto;
 import com.practice.taskplanning.dto.task.TaskPostDto;
 import com.practice.taskplanning.model.Team;
 import com.practice.taskplanning.model.task.Task;
 import com.practice.taskplanning.model.user.AppUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Set;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 public interface TaskMapper {
     @Mapping(target = "taskPoints", source = "taskPointPostDtos")
     Task toModel(TaskPostDto taskPostDto);
+
+    void updateModel(@MappingTarget Task task, TaskPatchDto taskPatchDto);
 
     @Mapping(target = "taskPointGetDtos", source = "taskPoints")
     @Mapping(target = "assignedUsersIds", source = "assignedUsers")
