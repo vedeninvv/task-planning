@@ -118,12 +118,19 @@ public class TaskService {
         taskRepository.deleteById(taskId);
     }
 
-    public void changeStatusIfNecessary(Task task, Date currentDate) {
+    public void updateTaskStatusWhenSetOfTaskPointsChanged(TaskPoint taskPoint, Date currentDate) {
+        taskRepository.save(
+                changeStatusIfNecessary(taskPoint.getTask(), currentDate)
+        );
+    }
+
+    public Task changeStatusIfNecessary(Task task, Date currentDate) {
         Status newStatus = determineCurrentStatus(task);
         if (task.getStatus() != newStatus) {
             task.setStatus(newStatus);
             task.setStatusUpdated(currentDate);
         }
+        return task;
     }
 
     public Status determineCurrentStatus(Task task) {
