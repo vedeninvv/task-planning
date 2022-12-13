@@ -80,8 +80,9 @@ public class TaskPointService {
         TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to delete taskPoint", taskPointId));
         });
-        taskPointRepository.delete(taskPoint);
-        taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), new Date());
+        TaskEntity task = taskPoint.getTask();
+        task.getTaskPoints().remove(taskPoint);
+        taskService.updateTaskWhenTaskPointsChanged(task, new Date());
         return taskPointMapper.toDto(taskPoint);
     }
 
