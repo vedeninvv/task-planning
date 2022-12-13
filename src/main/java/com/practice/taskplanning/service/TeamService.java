@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
-
 @Service
 public class TeamService {
     private final TeamRepository teamRepository;
@@ -34,7 +32,7 @@ public class TeamService {
     public TeamGetDto createTeam(TeamPostDto teamPostDto) {
         Team team = teamMapper.toModel(teamPostDto);
         if (teamPostDto.getMemberIds() != null) {
-            team.setMembers((Collection<AppUser>) userRepository.findAllById(teamPostDto.getMemberIds()));
+            team.setMembers(userRepository.findAllByIdIn(teamPostDto.getMemberIds()));
         }
         return teamMapper.toDto(teamRepository.save(team));
     }
@@ -70,7 +68,7 @@ public class TeamService {
         });
         teamMapper.updateModel(team, teamPatchDto);
         if (teamPatchDto.getMemberIds() != null) {
-            team.setMembers((Collection<AppUser>) userRepository.findAllById(teamPatchDto.getMemberIds()));
+            team.setMembers(userRepository.findAllByIdIn(teamPatchDto.getMemberIds()));
         }
         return teamMapper.toDto(teamRepository.save(team));
     }
