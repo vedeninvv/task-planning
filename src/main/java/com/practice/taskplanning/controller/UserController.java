@@ -51,7 +51,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Don't have permission to users", content = @Content)
     })
     @PreAuthorize("hasAuthority('user:all')")
-    @GetMapping("/{userId}")
+    @GetMapping("/id/{userId}")
     UserGetDto getUserById(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
@@ -63,8 +63,8 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Don't have permission to users", content = @Content)
     })
     @PreAuthorize("hasAuthority('user:all')")
-    @GetMapping(params = {"username"})
-    UserGetDto getUserByUsername(@RequestParam String username) {
+    @GetMapping("/{username}")
+    UserGetDto getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
 
