@@ -55,8 +55,12 @@ public class TaskService {
             taskPoint.setCreatedDate(currentDate);
         });
 
-        task.setAssignedUsers(userRepository.findAllByIdIn(taskPostDto.getAssignedUsersIds()));
-        task.setAssignedTeams(teamRepository.findAllByIdIn(taskPostDto.getAssignedTeamsIds()));
+        if (taskPostDto.getAssignedUsersIds() != null) {
+            task.setAssignedUsers(userRepository.findAllByIdIn(taskPostDto.getAssignedUsersIds()));
+        }
+        if (taskPostDto.getAssignedTeamsIds() != null) {
+            task.setAssignedTeams(teamRepository.findAllByIdIn(taskPostDto.getAssignedTeamsIds()));
+        }
 
         changeStatusIfNecessary(task, currentDate);
 
