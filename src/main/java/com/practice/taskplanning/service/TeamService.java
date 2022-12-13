@@ -10,6 +10,7 @@ import com.practice.taskplanning.model.user.AppUser;
 import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -43,10 +44,10 @@ public class TeamService {
         }));
     }
 
-    public Iterable<TeamGetDto> getAllTeams(Long memberId, Pageable pageable) {
+    public Page<TeamGetDto> getAllTeams(Long memberId, Pageable pageable) {
         if (memberId == null) {
             try {
-                return teamMapper.toDto(teamRepository.findAll(pageable));
+                return teamRepository.findAll(pageable).map(teamMapper::toDto);
             } catch (PropertyReferenceException exception) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
             }
@@ -55,7 +56,7 @@ public class TeamService {
                 throw new NotFoundException(String.format("User with id '%d' not found when try to filter teams", memberId));
             });
             try {
-                return teamMapper.toDto(teamRepository.getAllByMembersContaining(member, pageable));
+                return teamRepository.getAllByMembersContaining(member, pageable).map(teamMapper::toDto);
             } catch (PropertyReferenceException exception) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
             }

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -87,16 +88,16 @@ public class TaskController {
     })
     @PreAuthorize("hasAuthority('task:read')")
     @GetMapping()
-    public Iterable<TaskGetDto> getAllTasks(@RequestParam(required = false) Status status,
-                                            @RequestParam(required = false) Long assignedUserId,
-                                            @RequestParam(required = false) Long assignedTeamId,
-                                            @Parameter(description = "Search by part of name or description")
-                                            @RequestParam(required = false) String searchStr,
-                                            @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                            @RequestParam(required = false) Date createdDateBegin,
-                                            @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                            @RequestParam(required = false) Date createdDateEnd,
-                                            @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<TaskGetDto> getAllTasks(@RequestParam(required = false) Status status,
+                                        @RequestParam(required = false) Long assignedUserId,
+                                        @RequestParam(required = false) Long assignedTeamId,
+                                        @Parameter(description = "Search by part of name or description")
+                                        @RequestParam(required = false) String searchStr,
+                                        @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                        @RequestParam(required = false) Date createdDateBegin,
+                                        @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                        @RequestParam(required = false) Date createdDateEnd,
+                                        @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return taskService.getAllTasks(status, assignedUserId, assignedTeamId, searchStr,
                 createdDateBegin, createdDateEnd, pageable);
     }

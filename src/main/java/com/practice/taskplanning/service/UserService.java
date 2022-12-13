@@ -13,6 +13,7 @@ import com.practice.taskplanning.repository.RoleRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -87,11 +88,9 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public Iterable<UserGetDto> getAllUsers(Role role, Pageable pageable) {
+    public Page<UserGetDto> getAllUsers(Role role, Pageable pageable) {
         try {
-            return userMapper.toDto(
-                    userRepository.findAllByRole(role, pageable)
-            );
+            return userRepository.findAllByRole(role, pageable).map(userMapper::toDto);
         } catch (InvalidDataAccessApiUsageException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
         }

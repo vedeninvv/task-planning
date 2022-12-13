@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -87,14 +88,14 @@ public class TaskPointController {
     })
     @PreAuthorize("hasAuthority('task_point:read')")
     @GetMapping("/task-points")
-    public Iterable<TaskPointGetDto> getAllTaskPoints(@RequestParam(required = false) Long taskId,
-                                                      @RequestParam(required = false) Boolean completed,
-                                                      @RequestParam(required = false) String searchStr,
-                                                      @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                                      @RequestParam(required = false) Date createdDateBegin,
-                                                      @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                                      @RequestParam(required = false) Date createdDateEnd,
-                                                      @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<TaskPointGetDto> getAllTaskPoints(@RequestParam(required = false) Long taskId,
+                                                  @RequestParam(required = false) Boolean completed,
+                                                  @RequestParam(required = false) String searchStr,
+                                                  @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                  @RequestParam(required = false) Date createdDateBegin,
+                                                  @Parameter(description = "Date format: 'yyyy-MM-dd'") @DateTimeFormat(pattern = "yyyy-MM-dd")
+                                                  @RequestParam(required = false) Date createdDateEnd,
+                                                  @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return taskPointService.getAllTaskPoints(taskId, completed, searchStr, createdDateBegin, createdDateEnd, pageable);
     }
 

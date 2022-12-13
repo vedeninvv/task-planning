@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -77,8 +78,8 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping
-    Iterable<UserGetDto> getAllUsers(@RequestParam(required = false) Role role,
-                                     @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    Page<UserGetDto> getAllUsers(@RequestParam(required = false) Role role,
+                                 @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return userService.getAllUsers(role, pageable);
     }
 

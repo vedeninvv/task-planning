@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -63,8 +64,8 @@ public class TeamController {
     })
     @PreAuthorize("hasAuthority('team:read')")
     @GetMapping
-    public Iterable<TeamGetDto> getAllTeams(@RequestParam(required = false) Long memberId,
-                                            @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<TeamGetDto> getAllTeams(@RequestParam(required = false) Long memberId,
+                                        @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return teamService.getAllTeams(memberId, pageable);
     }
 

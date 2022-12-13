@@ -16,6 +16,7 @@ import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -75,13 +76,14 @@ public class TaskService {
         );
     }
 
-    public Iterable<TaskGetDto> getAllTasks(Status status, Long assignedUserId, Long assignedTeamId, String searchStr,
-                                            Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
+    public Page<TaskGetDto> getAllTasks(Status status, Long assignedUserId, Long assignedTeamId, String searchStr,
+                                        Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
         searchStr = searchStr != null ? searchStr.toLowerCase(Locale.ROOT) : searchStr;
         try {
-            return taskMapper.toDto(taskRepository.findAllWithFilters(status, assignedUserId, assignedTeamId,
-                    searchStr, createdDateBegin != null, createdDateBegin,
-                    createdDateEnd != null, createdDateEnd, pageable));
+            return taskRepository.findAllWithFilters(status, assignedUserId, assignedTeamId,
+                            searchStr, createdDateBegin != null, createdDateBegin,
+                            createdDateEnd != null, createdDateEnd, pageable)
+                    .map(taskMapper::toDto);
         } catch (InvalidDataAccessApiUsageException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
         }

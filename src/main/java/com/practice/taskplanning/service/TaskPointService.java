@@ -13,6 +13,7 @@ import com.practice.taskplanning.model.user.Permission;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -67,13 +68,12 @@ public class TaskPointService {
         );
     }
 
-    public Iterable<TaskPointGetDto> getAllTaskPoints(Long taskId, Boolean completed, String searchStr,
-                                                      Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
+    public Page<TaskPointGetDto> getAllTaskPoints(Long taskId, Boolean completed, String searchStr,
+                                                  Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
         searchStr = searchStr != null ? searchStr.toLowerCase(Locale.ROOT) : searchStr;
-        return taskPointMapper.toDto(
-                taskPointRepository.findAllWithFilters(taskId, completed, searchStr, createdDateBegin != null,
+        return taskPointRepository.findAllWithFilters(taskId, completed, searchStr, createdDateBegin != null,
                         createdDateBegin, createdDateEnd != null, createdDateEnd, pageable)
-        );
+                .map(taskPointMapper::toDto);
     }
 
     public void deleteTaskPoint(Long taskPointId) {
