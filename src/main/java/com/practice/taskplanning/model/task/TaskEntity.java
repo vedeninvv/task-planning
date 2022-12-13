@@ -38,6 +38,7 @@ public class TaskEntity {
     /**
      * Дата создания задачи
      */
+    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
     /**
@@ -49,11 +50,13 @@ public class TaskEntity {
     /**
      * Дата обновления статуса задачи
      */
+    @Temporal(TemporalType.DATE)
     private Date statusUpdated;
 
     /**
      * Срок выполнения задания
      */
+    @Temporal(TemporalType.DATE)
     private Date deadline;
 
     /**
@@ -71,7 +74,7 @@ public class TaskEntity {
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "appuser_id")
     )
-    private Set<UserEntity> assignedUsers = new HashSet<>();
+    private Set<UserEntity> assignedUsers;
 
     /**
      * Назначенные на задание команды

@@ -34,6 +34,7 @@ public class TaskPointEntity {
     /**
      * Дата создания подзадачи
      */
+    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
     /**
@@ -44,6 +45,7 @@ public class TaskPointEntity {
     /**
      * Дата выполнения подзадачи
      */
+    @Temporal(TemporalType.DATE)
     private Date completedDate;
 
     /**

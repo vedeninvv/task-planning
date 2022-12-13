@@ -1,5 +1,6 @@
 package com.practice.taskplanning.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
@@ -13,6 +14,7 @@ public class TaskPatchDto {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
     private Set<Long> taskPointsIds;

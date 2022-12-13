@@ -4,11 +4,13 @@ import com.practice.taskplanning.model.task.Status;
 import com.practice.taskplanning.model.task.TaskEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, Long> {
@@ -36,4 +38,10 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, L
     Page<TaskEntity> findAllWithFilters(Status status, Long assignedUserId, Long assignedTeamId,
                                         String searchStr, boolean hasCreatedDateBegin, Date createdDateBegin,
                                         boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
+
+    @Modifying
+    @Query("update TaskEntity task set task.status = :newStatus, task.statusUpdated = current_date" +
+            "   where (task.status in :statusListToUpdate)" +
+            "   and (task.deadline > current_date )")
+    void updateTaskStatusIfDeadlineOverdue(Status newStatus, List<Status> statusListToUpdate);
 }

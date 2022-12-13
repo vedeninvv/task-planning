@@ -1,5 +1,6 @@
 package com.practice.taskplanning.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.taskplanning.dto.taskPoint.TaskPointGetDto;
 import com.practice.taskplanning.model.task.Status;
@@ -17,12 +18,15 @@ public class TaskGetDto {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
 
     private Status status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date statusUpdated;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
     @JsonProperty("taskPoints")

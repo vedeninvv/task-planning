@@ -14,6 +14,7 @@ import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -203,9 +205,11 @@ public class TaskService {
 
         boolean isDateExpired;
         if (task.getStatus() == Status.COMPLETED) {
-            isDateExpired = task.getStatusUpdated().after(task.getDeadline());
+            isDateExpired = DateUtils.truncate(task.getStatusUpdated(), Calendar.DATE)
+                    .after(DateUtils.truncate(task.getDeadline(), Calendar.DATE));
         } else {
-            isDateExpired = task.getDeadline().before(new Date());
+            isDateExpired = DateUtils.truncate(task.getDeadline(), Calendar.DATE)
+                    .before(DateUtils.truncate(new Date(), Calendar.DATE));
         }
 
         if (!isAssigned && !isCompleted && !isDateExpired) {

@@ -1,10 +1,10 @@
 package com.practice.taskplanning.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
 import lombok.Data;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -20,7 +20,7 @@ public class TaskPostDto {
     @NotBlank
     private String description;
 
-    @Future
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
     @JsonProperty("taskPoints")
