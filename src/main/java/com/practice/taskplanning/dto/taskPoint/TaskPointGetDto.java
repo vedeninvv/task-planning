@@ -1,4 +1,4 @@
-package com.practice.taskplanning.dto.task;
+package com.practice.taskplanning.dto.taskPoint;
 
 import lombok.Data;
 

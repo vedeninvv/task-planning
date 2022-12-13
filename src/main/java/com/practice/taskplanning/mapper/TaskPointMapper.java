@@ -1,7 +1,7 @@
 package com.practice.taskplanning.mapper;
 
-import com.practice.taskplanning.dto.task.TaskPointGetDto;
-import com.practice.taskplanning.dto.task.TaskPointPostDto;
+import com.practice.taskplanning.dto.taskPoint.TaskPointGetDto;
+import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
 import com.practice.taskplanning.model.TaskPoint;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

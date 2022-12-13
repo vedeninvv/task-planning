@@ -1,6 +1,7 @@
 package com.practice.taskplanning.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.practice.taskplanning.dto.taskPoint.TaskPointGetDto;
 import com.practice.taskplanning.model.task.Status;
 import lombok.Data;
 
