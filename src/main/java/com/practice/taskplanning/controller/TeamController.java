@@ -89,6 +89,7 @@ public class TeamController {
             @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
             @ApiResponse(responseCode = "403", description = "Don't have permission to delete team", content = @Content)
     })
+
     @PreAuthorize("hasAuthority('team:write')")
     @DeleteMapping("/{teamId}")
     public void deleteById(@PathVariable Long teamId) {

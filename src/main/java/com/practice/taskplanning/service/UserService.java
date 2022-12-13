@@ -11,7 +11,6 @@ import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.model.user.RoleEntity;
 import com.practice.taskplanning.repository.RoleRepository;
 import com.practice.taskplanning.repository.UserRepository;
-import org.hibernate.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Pageable;
