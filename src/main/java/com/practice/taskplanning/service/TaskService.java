@@ -107,6 +107,13 @@ public class TaskService {
         return taskMapper.toDto(taskRepository.save(task));
     }
 
+    public void deleteTaskById(Long taskId) {
+        if (!taskRepository.existsById(taskId)) {
+            throw new NotFoundException(String.format("Task with id '%d' not found when try to delete task", taskId));
+        }
+        taskRepository.deleteById(taskId);
+    }
+
     public void changeStatusIfNecessary(Task task, Date currentDate) {
         Status newStatus = determineCurrentStatus(task);
         if (task.getStatus() != newStatus) {

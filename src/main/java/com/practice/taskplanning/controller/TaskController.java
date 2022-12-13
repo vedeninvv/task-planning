@@ -59,4 +59,10 @@ public class TaskController {
         return taskService.getAllTasks(status, assignedUserId, assignedTeamId, searchStr,
                 createdDateBegin, createdDateEnd, pageable);
     }
+
+    @PreAuthorize("hasAuthority('task:write')")
+    @DeleteMapping("/{taskId}")
+    public void deleteTaskById(@PathVariable Long taskId) {
+        taskService.deleteTaskById(taskId);
+    }
 }
