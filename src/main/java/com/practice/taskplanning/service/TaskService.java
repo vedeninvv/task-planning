@@ -153,8 +153,12 @@ public class TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to assign", taskId));
         });
-        task.getAssignedUsers().addAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
-        task.getAssignedTeams().addAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        if (taskExecutorsDto.getAssignedUsersIds() != null) {
+            task.getAssignedUsers().addAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
+        }
+        if (taskExecutorsDto.getAssignedTeamsIds() != null) {
+            task.getAssignedTeams().addAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        }
         changeStatusIfNecessary(task, new Date());
         return taskMapper.toDto(
                 taskRepository.save(task)
@@ -165,8 +169,12 @@ public class TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to remove executors", taskId));
         });
-        task.getAssignedUsers().removeAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
-        task.getAssignedTeams().removeAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        if (taskExecutorsDto.getAssignedUsersIds() != null) {
+            task.getAssignedUsers().removeAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
+        }
+        if (taskExecutorsDto.getAssignedTeamsIds() != null) {
+            task.getAssignedTeams().removeAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        }
         changeStatusIfNecessary(task, new Date());
         return taskMapper.toDto(
                 taskRepository.save(task)
