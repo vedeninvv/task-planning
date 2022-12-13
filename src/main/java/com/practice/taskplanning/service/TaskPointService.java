@@ -43,7 +43,7 @@ public class TaskPointService {
         Date currentDate = new Date();
         taskPoint.setCreatedDate(currentDate);
         taskPoint = taskPointRepository.save(taskPoint);
-        taskService.updateTaskStatusWhenSetOfTaskPointsChanged(taskPoint, currentDate);
+        taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, currentDate);
         return taskPointMapper.toDto(taskPoint);
     }
 
@@ -80,6 +80,6 @@ public class TaskPointService {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to delete taskPoint", taskPointId));
         });
         taskPointRepository.delete(taskPoint);
-        taskService.updateTaskStatusWhenSetOfTaskPointsChanged(taskPoint, new Date());
+        taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, new Date());
     }
 }
