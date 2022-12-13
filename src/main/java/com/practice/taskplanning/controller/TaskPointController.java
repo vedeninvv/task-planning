@@ -111,17 +111,35 @@ public class TaskPointController {
         taskPointService.deleteTaskPoint(taskPointId);
     }
 
+    @Operation(summary = "Complete taskPoint", security = @SecurityRequirement(name = "basicAuth"),
+            description = "Only admins and users, that assigned to taskPoint's task, can complete. " +
+                    "Assigned users are all users that was assigned or participants of assigned teams")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "TaskPoint was completed"),
+            @ApiResponse(responseCode = "404", description = "TaskPoint not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not admin or assigned user", content = @Content)
+    })
     @PreAuthorize("hasAnyAuthority('complete_task_point:assigned', 'complete_task_point:all')")
     @PostMapping("/task-points/{taskPointId}/complete")
     public TaskPointGetDto completeTaskPoint(@PathVariable Long taskPointId,
-                                             @AuthenticationPrincipal AppUser user) {
+                                             @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
         return taskPointService.completeTaskPoint(user, taskPointId);
     }
 
+    @Operation(summary = "Rollback taskPoint", security = @SecurityRequirement(name = "basicAuth"),
+            description = "Only admins and users, that assigned to taskPoint's task, can rollback. " +
+                    "Assigned users are all users that was assigned or participants of assigned teams")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "TaskPoint was rolled back"),
+            @ApiResponse(responseCode = "404", description = "TaskPoint not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not admin or assigned user", content = @Content)
+    })
     @PreAuthorize("hasAnyAuthority('rollback_task_point:assigned', 'rollback_task_point:all')")
     @PostMapping("/task-points/{taskPointId}/rollback-complete")
     public TaskPointGetDto rollbackTaskPoint(@PathVariable Long taskPointId,
-                                             @AuthenticationPrincipal AppUser user) {
+                                             @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
         return taskPointService.rollbackTaskPoint(user, taskPointId);
     }
 }
