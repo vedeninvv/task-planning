@@ -41,7 +41,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid data or username already exists", content = @Content)
     })
     @PostMapping
-    UserGetDto createUser(@RequestBody @Valid UserPostDto userPostDto) {
+    public UserGetDto createUser(@RequestBody @Valid UserPostDto userPostDto) {
         return userService.createUser(userPostDto);
     }
 
@@ -54,7 +54,7 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping("/id/{userId}")
-    UserGetDto getUserById(@PathVariable Long userId) {
+    public UserGetDto getUserById(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 
@@ -66,7 +66,7 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping("/{username}")
-    UserGetDto getUserByUsername(@PathVariable String username) {
+    public UserGetDto getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
 
@@ -78,8 +78,8 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:read:all')")
     @GetMapping
-    Page<UserGetDto> getAllUsers(@RequestParam(required = false) Role role,
-                                 @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<UserGetDto> getAllUsers(@RequestParam(required = false) Role role,
+                                        @ParameterObject @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return userService.getAllUsers(role, pageable);
     }
 
@@ -93,9 +93,9 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @PatchMapping("/{userId}")
-    UserGetDto updateUser(@PathVariable Long userId,
-                          @RequestBody @Valid UserPatchDto userPatchDto,
-                          @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
+    public UserGetDto updateUser(@PathVariable Long userId,
+                                 @RequestBody @Valid UserPatchDto userPatchDto,
+                                 @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return userService.updateUser(userId, userPatchDto);
     }
 
@@ -109,8 +109,8 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @DeleteMapping("/{userId}")
-    UserGetDto deleteUser(@PathVariable Long userId,
-                          @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
+    public UserGetDto deleteUser(@PathVariable Long userId,
+                                 @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return userService.deleteUser(userId);
     }
 }
