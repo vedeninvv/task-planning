@@ -140,7 +140,7 @@ public class TaskController {
     })
     @PreAuthorize("hasAuthority('assign_to_task:all')")
     @PostMapping("/{taskId}/assigne-executors")
-    public TaskGetDto assignToTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
+    public TaskGetDto assignToTask(@PathVariable Long taskId, @RequestBody @Valid TaskExecutorsDto taskExecutorsDto) {
         return taskService.assignToTask(taskId, taskExecutorsDto);
     }
 
@@ -169,7 +169,7 @@ public class TaskController {
     })
     @PreAuthorize("hasAuthority('remove_from_task:all')")
     @DeleteMapping("/{taskId}/remove-executors")
-    public TaskGetDto removeFromTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
+    public TaskGetDto removeFromTask(@PathVariable Long taskId, @RequestBody @Valid TaskExecutorsDto taskExecutorsDto) {
         return taskService.removeFromTask(taskId, taskExecutorsDto);
     }
 }
