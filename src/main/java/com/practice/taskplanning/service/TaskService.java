@@ -140,8 +140,7 @@ public class TaskService {
         AppUser user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to remove from task with id '%d'", userId, taskId));
         });
-        if (task.getAssignedUsers().contains(user)) {
-            task.getAssignedUsers().remove(user);
+        if (task.getAssignedUsers().remove(user)) {
             changeStatusIfNecessary(task, new Date());
             return taskMapper.toDto(
                     taskRepository.save(task)
