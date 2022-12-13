@@ -1,9 +1,11 @@
 package com.practice.taskplanning.controller;
 
+import com.practice.taskplanning.dto.task.TaskExecutorsDto;
 import com.practice.taskplanning.dto.task.TaskGetDto;
 import com.practice.taskplanning.dto.task.TaskPatchDto;
 import com.practice.taskplanning.dto.task.TaskPostDto;
 import com.practice.taskplanning.model.task.Status;
+import com.practice.taskplanning.model.user.AppUser;
 import com.practice.taskplanning.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -109,5 +112,33 @@ public class TaskController {
     @DeleteMapping("/{taskId}")
     public void deleteTaskById(@PathVariable Long taskId) {
         taskService.deleteTaskById(taskId);
+    }
+
+    @PreAuthorize("hasAuthority('assign_to_task:all') or (hasAuthority('assign_to_task:self') and #user.id == #userId)")
+    @PostMapping("/{taskId}/assigned-users/{userId}")
+    public TaskGetDto assignUserToTask(@PathVariable Long taskId,
+                                       @PathVariable Long userId,
+                                       @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+        return taskService.assignUserToTask(taskId, userId);
+    }
+
+    @PreAuthorize("hasAuthority('assign_to_task:all')")
+    @PostMapping("/{taskId}/assigne-executors")
+    public TaskGetDto assignToTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
+        return taskService.assignToTask(taskId, taskExecutorsDto);
+    }
+
+    @PreAuthorize("hasAuthority('remove_from_task:all') or (hasAuthority('remove_from_task:self') and #user.id == #userId)")
+    @DeleteMapping("/{taskId}/assigned-users/{userId}")
+    public TaskGetDto removeUserFromTask(@PathVariable Long taskId,
+                                         @PathVariable Long userId,
+                                         @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+        return taskService.removeUserFromTask(taskId, userId);
+    }
+
+    @PreAuthorize("hasAuthority('remove_from_task:all')")
+    @DeleteMapping("/{taskId}/remove-executors")
+    public TaskGetDto removeFromTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
+        return taskService.removeFromTask(taskId, taskExecutorsDto);
     }
 }

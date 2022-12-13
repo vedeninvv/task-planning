@@ -1,5 +1,6 @@
 package com.practice.taskplanning.service;
 
+import com.practice.taskplanning.dto.task.TaskExecutorsDto;
 import com.practice.taskplanning.dto.task.TaskGetDto;
 import com.practice.taskplanning.dto.task.TaskPatchDto;
 import com.practice.taskplanning.dto.task.TaskPostDto;
@@ -114,6 +115,62 @@ public class TaskService {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to delete task", taskId));
         }
         taskRepository.deleteById(taskId);
+    }
+
+    public TaskGetDto assignUserToTask(Long taskId, Long userId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Task with id '%d' not found when try to assign user with id '%d'", taskId, userId));
+        });
+        AppUser user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("User with id '%d' not found when try to assign to task with id '%d'", userId, taskId));
+        });
+        task.getAssignedUsers().add(user);
+        changeStatusIfNecessary(task, new Date());
+        return taskMapper.toDto(
+                taskRepository.save(task)
+        );
+    }
+
+    public TaskGetDto removeUserFromTask(Long taskId, Long userId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Task with id '%d' not found when try to remove user with id '%d' from task", taskId, userId));
+        });
+        AppUser user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("User with id '%d' not found when try to remove from task with id '%d'", userId, taskId));
+        });
+        if (task.getAssignedUsers().contains(user)) {
+            task.getAssignedUsers().remove(user);
+            changeStatusIfNecessary(task, new Date());
+            return taskMapper.toDto(
+                    taskRepository.save(task)
+            );
+        } else {
+            throw new NotFoundException(String.format("User with id '%d' not found among assigned users of task with id '%d'", userId, taskId));
+        }
+    }
+
+    public TaskGetDto assignToTask(Long taskId, TaskExecutorsDto taskExecutorsDto) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Task with id '%d' not found when try to assign", taskId));
+        });
+        task.getAssignedUsers().addAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
+        task.getAssignedTeams().addAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        changeStatusIfNecessary(task, new Date());
+        return taskMapper.toDto(
+                taskRepository.save(task)
+        );
+    }
+
+    public TaskGetDto removeFromTask(Long taskId, TaskExecutorsDto taskExecutorsDto) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("Task with id '%d' not found when try to remove executors", taskId));
+        });
+        task.getAssignedUsers().removeAll(userRepository.findAllByIdIn(taskExecutorsDto.getAssignedUsersIds()));
+        task.getAssignedTeams().removeAll(teamRepository.findAllByIdIn(taskExecutorsDto.getAssignedTeamsIds()));
+        changeStatusIfNecessary(task, new Date());
+        return taskMapper.toDto(
+                taskRepository.save(task)
+        );
     }
 
     public void updateTaskWhenTaskPointsChanged(Task task, Date currentDate) {
