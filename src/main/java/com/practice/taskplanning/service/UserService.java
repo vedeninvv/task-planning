@@ -11,13 +11,17 @@ import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.model.user.RoleEntity;
 import com.practice.taskplanning.repository.RoleRepository;
 import com.practice.taskplanning.repository.UserRepository;
+import org.hibernate.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -85,9 +89,13 @@ public class UserService implements UserDetailsService {
     }
 
     public Iterable<UserGetDto> getAllUsers(Role role, Pageable pageable) {
-        return userMapper.toDto(
-                userRepository.findAllByRole(role, pageable)
-        );
+        try {
+            return userMapper.toDto(
+                    userRepository.findAllByRole(role, pageable)
+            );
+        } catch (InvalidDataAccessApiUsageException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
+        }
     }
 
     public UserGetDto updateUser(Long userId, UserPatchDto userPatchDto) {
