@@ -18,6 +18,12 @@ public interface UserRepository extends PagingAndSortingRepository<AppUser, Long
 
     boolean existsByUsername(String username);
 
+    /**
+     * Находит всех пользователей, имеющих переданную роль
+     * @param role роль
+     * @param pageable условия пагинации
+     * @return Page пользователей
+     */
     @Query("select distinct user from AppUser user join user.roles role where role.role = ?1 or ?1 is null")
     Page<AppUser> findAllByRole(Role role, Pageable pageable);
 

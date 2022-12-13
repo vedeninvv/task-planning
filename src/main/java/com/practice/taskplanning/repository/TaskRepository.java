@@ -12,6 +12,19 @@ import java.util.Date;
 
 @Repository
 public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
+    /**
+     * Находит все задания, удовлетворяющие заданным параметрам
+     * @param status статус задания
+     * @param assignedUserId id назначенного на задание пользователя
+     * @param assignedTeamId id назначенной на задание команды
+     * @param searchStr строка, входящая в имя или описание
+     * @param hasCreatedDateBegin наличие даты создания, не раньше которой требуются задачи
+     * @param createdDateBegin дата создания, не раньше которой требуются задачи
+     * @param hasCreatedDateEnd наличие даты создания, не позже которой требуются задачи
+     * @param createdDateEnd дата создания, не позже которой требуются задачи
+     * @param pageable условия пагинации
+     * @return Page заданий
+     */
     @Query("select distinct task from Task task left join task.assignedUsers user left join task.assignedTeams team" +
             "   where (:status is null or task.status = :status)" +
             "   and (:assignedUserId is null or user.id = :assignedUserId)" +

@@ -17,6 +17,9 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Тип роли
+     */
     @Enumerated(EnumType.STRING)
     @Column()
     private Role role;

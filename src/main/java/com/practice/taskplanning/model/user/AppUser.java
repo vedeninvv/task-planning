@@ -20,11 +20,20 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Имя пользователя
+     */
     @Column(unique = true)
     private String username;
 
+    /**
+     * Пароль пользователя
+     */
     private String password;
 
+    /**
+     * Роли пользователя
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "appuser_role",
@@ -33,6 +42,10 @@ public class AppUser implements UserDetails {
     )
     private Set<RoleEntity> roles = new HashSet<>();
 
+    /**
+     * Получить разрешения пользователя в зависимости от его ролей
+     * @return коллекция разрешений
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles().stream()

@@ -18,8 +18,14 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Название команды
+     */
     private String name;
 
+    /**
+     * Участники команды
+     */
     @ManyToMany
     @JoinTable(
             name = "team_appuser",

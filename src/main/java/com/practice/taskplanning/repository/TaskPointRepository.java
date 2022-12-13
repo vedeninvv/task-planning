@@ -15,6 +15,18 @@ import java.util.Set;
 public interface TaskPointRepository extends PagingAndSortingRepository<TaskPoint, Long> {
     Set<TaskPoint> findAllByIdIn(Collection<Long> ids);
 
+    /**
+     * Находит все подзадачи, удовлетворяющие заданным параметрам
+     * @param taskId id задание подзадач
+     * @param completed выполнена ли подзадача
+     * @param searchStr строка, входящая в имя или описание
+     * @param hasCreatedDateBegin наличие даты создания, не раньше которой требуются подзадачи
+     * @param createdDateBegin дата создания, не раньше которой требуются подзадачи
+     * @param hasCreatedDateEnd наличие даты создания, не позже которой требуются подзадачи
+     * @param createdDateEnd дата создания, не позже которой требуются подзадачи
+     * @param pageable условия пагинации
+     * @return Page подзадач
+     */
     @Query("select tp from TaskPoint tp join tp.task t" +
             "   where (:taskId is null or t.id = :taskId)" +
             "   and (:completed is null or tp.completed = :completed)" +
