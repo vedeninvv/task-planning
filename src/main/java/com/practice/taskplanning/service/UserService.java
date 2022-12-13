@@ -90,11 +90,12 @@ public class UserService implements UserDetailsService {
         return userMapper.toDto(user);
     }
 
-    public void deleteUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
+    public UserGetDto deleteUser(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to delete user", userId));
-        }
-        userRepository.deleteById(userId);
+        });
+        userRepository.delete(user);
+        return userMapper.toDto(user);
     }
 
     public UserGetDto getUserByUsername(String username) {

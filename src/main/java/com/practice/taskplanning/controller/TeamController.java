@@ -93,7 +93,7 @@ public class TeamController {
 
     @PreAuthorize("hasAuthority('team:write')")
     @DeleteMapping("/{teamId}")
-    public void deleteById(@PathVariable Long teamId) {
-        teamService.deleteTeamById(teamId);
+    public TeamGetDto deleteById(@PathVariable Long teamId) {
+        return teamService.deleteTeamById(teamId);
     }
 }

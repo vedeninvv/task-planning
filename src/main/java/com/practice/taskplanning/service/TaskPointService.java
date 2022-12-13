@@ -8,8 +8,8 @@ import com.practice.taskplanning.exception.UserNotAssigned;
 import com.practice.taskplanning.mapper.TaskPointMapper;
 import com.practice.taskplanning.model.TaskPointEntity;
 import com.practice.taskplanning.model.task.TaskEntity;
-import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Permission;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +76,13 @@ public class TaskPointService {
                 .map(taskPointMapper::toDto);
     }
 
-    public void deleteTaskPoint(Long taskPointId) {
+    public TaskPointGetDto deleteTaskPoint(Long taskPointId) {
         TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to delete taskPoint", taskPointId));
         });
         taskPointRepository.delete(taskPoint);
         taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), new Date());
+        return taskPointMapper.toDto(taskPoint);
     }
 
     public TaskPointGetDto completeTaskPoint(UserEntity user, Long taskPointId) {

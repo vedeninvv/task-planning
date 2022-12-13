@@ -109,8 +109,8 @@ public class UserController {
     })
     @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @DeleteMapping("/{userId}")
-    void deleteUser(@PathVariable Long userId,
+    UserGetDto deleteUser(@PathVariable Long userId,
                     @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
-        userService.deleteUser(userId);
+        return userService.deleteUser(userId);
     }
 }

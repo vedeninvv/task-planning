@@ -74,10 +74,11 @@ public class TeamService {
         return teamMapper.toDto(teamRepository.save(team));
     }
 
-    public void deleteTeamById(Long teamId) {
-        if (!teamRepository.existsById(teamId)) {
+    public TeamGetDto deleteTeamById(Long teamId) {
+        TeamEntity team = teamRepository.findById(teamId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Team with id '%d' not found when try to delete", teamId));
-        }
-        teamRepository.deleteById(teamId);
+        });
+        teamRepository.delete(team);
+        return teamMapper.toDto(team);
     }
 }

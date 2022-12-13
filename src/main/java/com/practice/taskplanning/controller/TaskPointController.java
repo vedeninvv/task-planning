@@ -108,8 +108,8 @@ public class TaskPointController {
     })
     @PreAuthorize("hasAuthority('task_point:write')")
     @DeleteMapping("/task-points/{taskPointId}")
-    public void deleteTaskPoint(@PathVariable Long taskPointId) {
-        taskPointService.deleteTaskPoint(taskPointId);
+    public TaskPointGetDto deleteTaskPoint(@PathVariable Long taskPointId) {
+        return taskPointService.deleteTaskPoint(taskPointId);
     }
 
     @Operation(summary = "Complete taskPoint", security = @SecurityRequirement(name = "basicAuth"),

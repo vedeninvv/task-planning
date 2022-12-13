@@ -111,8 +111,8 @@ public class TaskController {
     })
     @PreAuthorize("hasAuthority('task:write')")
     @DeleteMapping("/{taskId}")
-    public void deleteTaskById(@PathVariable Long taskId) {
-        taskService.deleteTaskById(taskId);
+    public TaskGetDto deleteTaskById(@PathVariable Long taskId) {
+        return taskService.deleteTaskById(taskId);
     }
 
     @Operation(summary = "Assign user to task", security = @SecurityRequirement(name = "basicAuth"),

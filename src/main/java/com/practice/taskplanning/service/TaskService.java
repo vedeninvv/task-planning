@@ -117,11 +117,12 @@ public class TaskService {
         return taskMapper.toDto(taskRepository.save(task));
     }
 
-    public void deleteTaskById(Long taskId) {
-        if (!taskRepository.existsById(taskId)) {
+    public TaskGetDto deleteTaskById(Long taskId) {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to delete task", taskId));
-        }
-        taskRepository.deleteById(taskId);
+        });
+        taskRepository.delete(task);
+        return taskMapper.toDto(task);
     }
 
     public TaskGetDto assignUserToTask(Long taskId, Long userId) {
