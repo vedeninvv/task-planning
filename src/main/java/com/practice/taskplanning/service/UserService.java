@@ -6,10 +6,8 @@ import com.practice.taskplanning.dto.user.UserPostDto;
 import com.practice.taskplanning.exception.DuplicateUniqueValueException;
 import com.practice.taskplanning.exception.NotFoundException;
 import com.practice.taskplanning.mapper.UserMapper;
-import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
-import com.practice.taskplanning.model.user.RoleEntity;
-import com.practice.taskplanning.repository.RoleRepository;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -23,41 +21,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
                        UserMapper userMapper,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @PostConstruct
-    private void init() {
-        List<Role> rolesInDatabase = ((Collection<RoleEntity>) roleRepository.findAll()).stream()
-                .map(RoleEntity::getRole)
-                .collect(Collectors.toList());
-        if (!rolesInDatabase.containsAll(Arrays.stream(Role.values()).toList())) {
-            roleRepository.deleteAll();
-            for (Role role : Role.values()) {
-                roleRepository.save(new RoleEntity(null, role));
-            }
-        }
     }
 
     @Override
