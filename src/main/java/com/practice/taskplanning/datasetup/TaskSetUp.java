@@ -1,15 +1,15 @@
 package com.practice.taskplanning.datasetup;
 
-import com.practice.taskplanning.service.TaskService;
+import com.practice.taskplanning.service.impl.TaskServiceImpl;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TaskSetUp implements DataSetUp {
-    private final TaskService taskService;
+    private final TaskServiceImpl taskService;
 
-    public TaskSetUp(TaskService taskService) {
+    public TaskSetUp(TaskServiceImpl taskService) {
         this.taskService = taskService;
     }
 

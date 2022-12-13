@@ -3,8 +3,8 @@ package com.practice.taskplanning.controller;
 import com.practice.taskplanning.dto.user.UserGetDto;
 import com.practice.taskplanning.dto.user.UserPatchDto;
 import com.practice.taskplanning.dto.user.UserPostDto;
-import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -110,7 +110,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @DeleteMapping("/{userId}")
     UserGetDto deleteUser(@PathVariable Long userId,
-                    @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
+                          @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return userService.deleteUser(userId);
     }
 }
