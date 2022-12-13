@@ -5,7 +5,7 @@ import com.practice.taskplanning.dto.task.TaskGetDto;
 import com.practice.taskplanning.dto.task.TaskPatchDto;
 import com.practice.taskplanning.dto.task.TaskPostDto;
 import com.practice.taskplanning.model.task.Status;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -127,7 +127,7 @@ public class TaskController {
     @PostMapping("/{taskId}/assigned-users/{userId}")
     public TaskGetDto assignUserToTask(@PathVariable Long taskId,
                                        @PathVariable Long userId,
-                                       @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+                                       @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return taskService.assignUserToTask(taskId, userId);
     }
 
@@ -156,7 +156,7 @@ public class TaskController {
     @DeleteMapping("/{taskId}/assigned-users/{userId}")
     public TaskGetDto removeUserFromTask(@PathVariable Long taskId,
                                          @PathVariable Long userId,
-                                         @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+                                         @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return taskService.removeUserFromTask(taskId, userId);
     }
 

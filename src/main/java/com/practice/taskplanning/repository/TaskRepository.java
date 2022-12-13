@@ -1,7 +1,7 @@
 package com.practice.taskplanning.repository;
 
 import com.practice.taskplanning.model.task.Status;
-import com.practice.taskplanning.model.task.Task;
+import com.practice.taskplanning.model.task.TaskEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 
 @Repository
-public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
+public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, Long> {
     /**
      * Находит все задания, удовлетворяющие заданным параметрам
      *
@@ -26,14 +26,14 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
      * @param pageable            условия пагинации
      * @return Page заданий
      */
-    @Query("select distinct task from Task task left join task.assignedUsers user left join task.assignedTeams team" +
+    @Query("select distinct task from TaskEntity task left join task.assignedUsers user left join task.assignedTeams team" +
             "   where (:status is null or task.status = :status)" +
             "   and (:assignedUserId is null or user.id = :assignedUserId)" +
             "   and (:assignedTeamId is null  or team.id = :assignedTeamId)" +
             "   and (:searchStr is null or task.name like %:searchStr% or task.description like %:searchStr%)" +
             "   and (:hasCreatedDateBegin = false or task.createdDate >= :createdDateBegin)" +
             "   and (:hasCreatedDateEnd = false or task.createdDate <= :createdDateEnd)")
-    Page<Task> findAllWithFilters(Status status, Long assignedUserId, Long assignedTeamId,
-                                  String searchStr, boolean hasCreatedDateBegin, Date createdDateBegin,
-                                  boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
+    Page<TaskEntity> findAllWithFilters(Status status, Long assignedUserId, Long assignedTeamId,
+                                        String searchStr, boolean hasCreatedDateBegin, Date createdDateBegin,
+                                        boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
 }

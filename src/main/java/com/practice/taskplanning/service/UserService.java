@@ -6,7 +6,7 @@ import com.practice.taskplanning.dto.user.UserPostDto;
 import com.practice.taskplanning.exception.DuplicateUniqueValueException;
 import com.practice.taskplanning.exception.NotFoundException;
 import com.practice.taskplanning.mapper.UserMapper;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.model.user.RoleEntity;
 import com.practice.taskplanning.repository.RoleRepository;
@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         userPostDto.setPassword(
                 passwordEncoder.encode(userPostDto.getPassword())
         );
-        AppUser user = userMapper.toModel(userPostDto);
+        UserEntity user = userMapper.toModel(userPostDto);
         return userMapper.toDto(
                 userRepository.save(user)
         );
@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserGetDto updateUser(Long userId, UserPatchDto userPatchDto) {
-        AppUser user = userRepository.findById(userId).orElseThrow(() -> {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to update user", userId));
         });
         if (userPatchDto.getUsername() != null && !userPatchDto.getUsername().equals(user.getUsername()) &&

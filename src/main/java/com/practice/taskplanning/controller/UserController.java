@@ -3,7 +3,7 @@ package com.practice.taskplanning.controller;
 import com.practice.taskplanning.dto.user.UserGetDto;
 import com.practice.taskplanning.dto.user.UserPatchDto;
 import com.practice.taskplanning.dto.user.UserPostDto;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,7 +95,7 @@ public class UserController {
     @PatchMapping("/{userId}")
     UserGetDto updateUser(@PathVariable Long userId,
                           @RequestBody @Valid UserPatchDto userPatchDto,
-                          @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+                          @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         return userService.updateUser(userId, userPatchDto);
     }
 
@@ -110,7 +110,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:write:all') or (hasAuthority('user:write:self') and #user.id == #userId)")
     @DeleteMapping("/{userId}")
     void deleteUser(@PathVariable Long userId,
-                    @Parameter(hidden = true) @AuthenticationPrincipal AppUser user) {
+                    @Parameter(hidden = true) @AuthenticationPrincipal UserEntity user) {
         userService.deleteUser(userId);
     }
 }

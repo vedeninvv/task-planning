@@ -1,6 +1,6 @@
 package com.practice.taskplanning.repository;
 
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<AppUser, Long> {
-    Optional<AppUser> findByUsername(String username);
+public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
+    Optional<UserEntity> findByUsername(String username);
 
     boolean existsByUsername(String username);
 
@@ -25,8 +25,8 @@ public interface UserRepository extends PagingAndSortingRepository<AppUser, Long
      * @param pageable условия пагинации
      * @return Page пользователей
      */
-    @Query("select distinct user from AppUser user join user.roles role where role.role = ?1 or ?1 is null")
-    Page<AppUser> findAllByRole(Role role, Pageable pageable);
+    @Query("select distinct user from UserEntity user join user.roles role where role.role = ?1 or ?1 is null")
+    Page<UserEntity> findAllByRole(Role role, Pageable pageable);
 
-    Set<AppUser> findAllByIdIn(Collection<Long> ids);
+    Set<UserEntity> findAllByIdIn(Collection<Long> ids);
 }

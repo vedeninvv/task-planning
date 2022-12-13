@@ -5,8 +5,8 @@ import com.practice.taskplanning.dto.team.TeamPatchDto;
 import com.practice.taskplanning.dto.team.TeamPostDto;
 import com.practice.taskplanning.exception.NotFoundException;
 import com.practice.taskplanning.mapper.TeamMapper;
-import com.practice.taskplanning.model.Team;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.TeamEntity;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class TeamService {
     }
 
     public TeamGetDto createTeam(TeamPostDto teamPostDto) {
-        Team team = teamMapper.toModel(teamPostDto);
+        TeamEntity team = teamMapper.toModel(teamPostDto);
         if (teamPostDto.getMemberIds() != null) {
             team.setMembers(userRepository.findAllByIdIn(teamPostDto.getMemberIds()));
         }
@@ -52,7 +52,7 @@ public class TeamService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page parameters: " + exception.getMessage());
             }
         } else {
-            AppUser member = userRepository.findById(memberId).orElseThrow(() -> {
+            UserEntity member = userRepository.findById(memberId).orElseThrow(() -> {
                 throw new NotFoundException(String.format("User with id '%d' not found when try to filter teams", memberId));
             });
             try {
@@ -64,7 +64,7 @@ public class TeamService {
     }
 
     public TeamGetDto updateTeam(Long teamId, TeamPatchDto teamPatchDto) {
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> {
+        TeamEntity team = teamRepository.findById(teamId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Team with id '%d' not found when try to update team", teamId));
         });
         teamMapper.updateModel(team, teamPatchDto);

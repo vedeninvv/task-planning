@@ -1,6 +1,6 @@
 package com.practice.taskplanning.model;
 
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,10 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "team")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Team {
+public class TeamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,5 +33,5 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "appuser_id")
     )
-    private Set<AppUser> members = new HashSet<>();
+    private Set<UserEntity> members = new HashSet<>();
 }

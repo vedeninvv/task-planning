@@ -1,8 +1,8 @@
 package com.practice.taskplanning.model.task;
 
-import com.practice.taskplanning.model.TaskPoint;
-import com.practice.taskplanning.model.Team;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.TaskPointEntity;
+import com.practice.taskplanning.model.TeamEntity;
+import com.practice.taskplanning.model.user.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,10 +16,11 @@ import java.util.Set;
  * Задание - то, что выполняют пользователи
  */
 @Entity
+@Table(name = "task")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Task {
+public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,7 +60,7 @@ public class Task {
      * Подзадачи, из которых состоит задание
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", orphanRemoval = true)
-    private Set<TaskPoint> taskPoints = new HashSet<>();
+    private Set<TaskPointEntity> taskPoints = new HashSet<>();
 
     /**
      * Назначенные на задание пользователи
@@ -70,7 +71,7 @@ public class Task {
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "appuser_id")
     )
-    private Set<AppUser> assignedUsers = new HashSet<>();
+    private Set<UserEntity> assignedUsers = new HashSet<>();
 
     /**
      * Назначенные на задание команды
@@ -81,5 +82,5 @@ public class Task {
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id")
     )
-    private Set<Team> assignedTeams = new HashSet<>();
+    private Set<TeamEntity> assignedTeams = new HashSet<>();
 }

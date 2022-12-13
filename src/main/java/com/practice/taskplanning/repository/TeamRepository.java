@@ -1,7 +1,7 @@
 package com.practice.taskplanning.repository;
 
-import com.practice.taskplanning.model.Team;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.TeamEntity;
+import com.practice.taskplanning.model.user.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.Set;
 
 @Repository
-public interface TeamRepository extends PagingAndSortingRepository<Team, Long> {
-    Page<Team> getAllByMembersContaining(AppUser member, Pageable pageable);
+public interface TeamRepository extends PagingAndSortingRepository<TeamEntity, Long> {
+    Page<TeamEntity> getAllByMembersContaining(UserEntity member, Pageable pageable);
 
-    Set<Team> findAllByIdIn(Collection<Long> ids);
+    Set<TeamEntity> findAllByIdIn(Collection<Long> ids);
 }

@@ -6,10 +6,10 @@ import com.practice.taskplanning.dto.task.TaskPatchDto;
 import com.practice.taskplanning.dto.task.TaskPostDto;
 import com.practice.taskplanning.exception.NotFoundException;
 import com.practice.taskplanning.mapper.TaskMapper;
-import com.practice.taskplanning.model.TaskPoint;
+import com.practice.taskplanning.model.TaskPointEntity;
 import com.practice.taskplanning.model.task.Status;
-import com.practice.taskplanning.model.task.Task;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.task.TaskEntity;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import com.practice.taskplanning.repository.TeamRepository;
@@ -48,7 +48,7 @@ public class TaskService {
     public TaskGetDto createTask(TaskPostDto taskPostDto) {
         final Date currentDate = new Date();
 
-        Task task = taskMapper.toModel(taskPostDto);
+        TaskEntity task = taskMapper.toModel(taskPostDto);
         task.setCreatedDate(currentDate);
 
         task.getTaskPoints().forEach(taskPoint -> {
@@ -90,7 +90,7 @@ public class TaskService {
     }
 
     public TaskGetDto updateTask(Long taskId, TaskPatchDto taskPatchDto) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to update", taskId));
         });
 
@@ -120,10 +120,10 @@ public class TaskService {
     }
 
     public TaskGetDto assignUserToTask(Long taskId, Long userId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to assign user with id '%d'", taskId, userId));
         });
-        AppUser user = userRepository.findById(userId).orElseThrow(() -> {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to assign to task with id '%d'", userId, taskId));
         });
         task.getAssignedUsers().add(user);
@@ -134,10 +134,10 @@ public class TaskService {
     }
 
     public TaskGetDto removeUserFromTask(Long taskId, Long userId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to remove user with id '%d' from task", taskId, userId));
         });
-        AppUser user = userRepository.findById(userId).orElseThrow(() -> {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to remove from task with id '%d'", userId, taskId));
         });
         if (task.getAssignedUsers().remove(user)) {
@@ -151,7 +151,7 @@ public class TaskService {
     }
 
     public TaskGetDto assignToTask(Long taskId, TaskExecutorsDto taskExecutorsDto) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to assign", taskId));
         });
         if (taskExecutorsDto.getAssignedUsersIds() != null) {
@@ -167,7 +167,7 @@ public class TaskService {
     }
 
     public TaskGetDto removeFromTask(Long taskId, TaskExecutorsDto taskExecutorsDto) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to remove executors", taskId));
         });
         if (taskExecutorsDto.getAssignedUsersIds() != null) {
@@ -182,13 +182,13 @@ public class TaskService {
         );
     }
 
-    public void updateTaskWhenTaskPointsChanged(Task task, Date currentDate) {
+    public void updateTaskWhenTaskPointsChanged(TaskEntity task, Date currentDate) {
         taskRepository.save(
                 changeStatusIfNecessary(task, currentDate)
         );
     }
 
-    public Task changeStatusIfNecessary(Task task, Date currentDate) {
+    public TaskEntity changeStatusIfNecessary(TaskEntity task, Date currentDate) {
         Status newStatus = determineCurrentStatus(task);
         if (task.getStatus() != newStatus) {
             task.setStatus(newStatus);
@@ -197,9 +197,9 @@ public class TaskService {
         return task;
     }
 
-    public Status determineCurrentStatus(Task task) {
+    public Status determineCurrentStatus(TaskEntity task) {
         boolean isAssigned = !task.getAssignedUsers().isEmpty() || !task.getAssignedTeams().isEmpty();
-        boolean isCompleted = task.getTaskPoints().stream().allMatch(TaskPoint::isCompleted);
+        boolean isCompleted = task.getTaskPoints().stream().allMatch(TaskPointEntity::isCompleted);
 
         boolean isDateExpired;
         if (task.getStatus() == Status.COMPLETED) {
@@ -221,7 +221,7 @@ public class TaskService {
         }
     }
 
-    public boolean isUserAssignedToTask(AppUser user, Task task) {
+    public boolean isUserAssignedToTask(UserEntity user, TaskEntity task) {
         boolean isAssignedUser = task.getAssignedUsers().contains(user);
         boolean inAssignedTeam = task.getAssignedTeams().stream().anyMatch(team -> team.getMembers().contains(user));
         return isAssignedUser || inAssignedTeam;

@@ -1,6 +1,6 @@
 package com.practice.taskplanning.model;
 
-import com.practice.taskplanning.model.task.Task;
+import com.practice.taskplanning.model.task.TaskEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,10 +12,11 @@ import java.util.Date;
  * Подзадача, из которых состоят задания
  */
 @Entity
+@Table(name = "task_point")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class TaskPoint {
+public class TaskPointEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,5 +50,5 @@ public class TaskPoint {
      * Задание, которому принадлежит подзадача
      */
     @ManyToOne(optional = false)
-    private Task task;
+    private TaskEntity task;
 }

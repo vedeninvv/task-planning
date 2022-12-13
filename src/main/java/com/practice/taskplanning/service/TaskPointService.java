@@ -6,9 +6,9 @@ import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
 import com.practice.taskplanning.exception.NotFoundException;
 import com.practice.taskplanning.exception.UserNotAssigned;
 import com.practice.taskplanning.mapper.TaskPointMapper;
-import com.practice.taskplanning.model.TaskPoint;
-import com.practice.taskplanning.model.task.Task;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.TaskPointEntity;
+import com.practice.taskplanning.model.task.TaskEntity;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Permission;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
@@ -37,11 +37,11 @@ public class TaskPointService {
     }
 
     public TaskPointGetDto createTaskPoint(Long taskId, TaskPointPostDto taskPointPostDto) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> {
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(
                     String.format("Task not found with id '%d' when try to create taskPoint related to this task", taskId));
         });
-        TaskPoint taskPoint = taskPointMapper.toModel(taskPointPostDto);
+        TaskPointEntity taskPoint = taskPointMapper.toModel(taskPointPostDto);
         taskPoint.setTask(task);
         Date currentDate = new Date();
         taskPoint.setCreatedDate(currentDate);
@@ -51,7 +51,7 @@ public class TaskPointService {
     }
 
     public TaskPointGetDto updateTaskPoint(Long taskPointId, TaskPointPatchDto taskPointPatchDto) {
-        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+        TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to update taskPoint", taskPointId));
         });
         taskPointMapper.updateModel(taskPoint, taskPointPatchDto);
@@ -77,15 +77,15 @@ public class TaskPointService {
     }
 
     public void deleteTaskPoint(Long taskPointId) {
-        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+        TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to delete taskPoint", taskPointId));
         });
         taskPointRepository.delete(taskPoint);
         taskService.updateTaskWhenTaskPointsChanged(taskPoint.getTask(), new Date());
     }
 
-    public TaskPointGetDto completeTaskPoint(AppUser user, Long taskPointId) {
-        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+    public TaskPointGetDto completeTaskPoint(UserEntity user, Long taskPointId) {
+        TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to complete taskPoint", taskPointId));
         });
         if (hasAccessToComplete(user, taskPoint)) {
@@ -102,7 +102,7 @@ public class TaskPointService {
         }
     }
 
-    public boolean hasAccessToComplete(AppUser user, TaskPoint taskPoint) {
+    public boolean hasAccessToComplete(UserEntity user, TaskPointEntity taskPoint) {
         if (user.getAuthorities().contains(new SimpleGrantedAuthority(Permission.COMPLETE_ALL_TASK_POINT.getPermission()))) {
             return true;
         } else {
@@ -110,8 +110,8 @@ public class TaskPointService {
         }
     }
 
-    public TaskPointGetDto rollbackTaskPoint(AppUser user, Long taskPointId) {
-        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+    public TaskPointGetDto rollbackTaskPoint(UserEntity user, Long taskPointId) {
+        TaskPointEntity taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
             throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to rollback taskPoint", taskPointId));
         });
         if (hasAccessToRollback(user, taskPoint)) {
@@ -127,7 +127,7 @@ public class TaskPointService {
         }
     }
 
-    public boolean hasAccessToRollback(AppUser user, TaskPoint taskPoint) {
+    public boolean hasAccessToRollback(UserEntity user, TaskPointEntity taskPoint) {
         if (user.getAuthorities().contains(new SimpleGrantedAuthority(Permission.ROLLBACK_ALL_TASK_POINT.getPermission()))) {
             return true;
         } else {

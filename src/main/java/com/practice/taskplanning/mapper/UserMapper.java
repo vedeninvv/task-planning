@@ -3,7 +3,7 @@ package com.practice.taskplanning.mapper;
 import com.practice.taskplanning.dto.user.UserGetDto;
 import com.practice.taskplanning.dto.user.UserPatchDto;
 import com.practice.taskplanning.dto.user.UserPostDto;
-import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.model.user.Role;
 import org.mapstruct.Condition;
 import org.mapstruct.Mapper;
@@ -15,13 +15,13 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = {RoleMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-    UserGetDto toDto(AppUser appUser);
+    UserGetDto toDto(UserEntity userEntity);
 
-    Iterable<UserGetDto> toDto(Iterable<AppUser> appUsers);
+    Iterable<UserGetDto> toDto(Iterable<UserEntity> appUsers);
 
-    AppUser toModel(UserPostDto userPostDto);
+    UserEntity toModel(UserPostDto userPostDto);
 
-    void updateModel(@MappingTarget AppUser user, UserPatchDto userPatchDto);
+    void updateModel(@MappingTarget UserEntity user, UserPatchDto userPatchDto);
 
     @Condition
     default boolean rolesIsNotEmpty(Set<Role> roles) {
