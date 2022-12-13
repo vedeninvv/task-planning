@@ -19,7 +19,8 @@ public interface TaskPointRepository extends PagingAndSortingRepository<TaskPoin
             "   where (:taskId is null or t.id = :taskId)" +
             "   and (:completed is null or tp.completed = :completed)" +
             "   and (:searchStr is null or tp.name like %:searchStr% or tp.description like %:searchStr%)" +
-            "   and (tp.createdDate between :createdDateBegin and :createdDateEnd)")
-    Page<TaskPoint> findAllWithFilters(Long taskId, Boolean completed, String searchStr,
-                                       Date createdDateBegin, Date createdDateEnd, Pageable pageable);
+            "   and (:hasCreatedDateBegin = false or tp.createdDate >= :createdDateBegin)" +
+            "   and (:hasCreatedDateEnd = false or tp.createdDate <= :createdDateEnd)")
+    Page<TaskPoint> findAllWithFilters(Long taskId, Boolean completed, String searchStr, boolean hasCreatedDateBegin,
+                                       Date createdDateBegin, boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
 }

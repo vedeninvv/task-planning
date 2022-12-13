@@ -17,9 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 @Service
@@ -72,10 +70,9 @@ public class TaskPointService {
     public Iterable<TaskPointGetDto> getAllTaskPoints(Long taskId, Boolean completed, String searchStr,
                                                       Date createdDateBegin, Date createdDateEnd, Pageable pageable) {
         searchStr = searchStr != null ? searchStr.toLowerCase(Locale.ROOT) : searchStr;
-        createdDateBegin = createdDateBegin != null ? createdDateBegin : new Date(0);
-        createdDateEnd = createdDateEnd != null ? createdDateEnd : new GregorianCalendar(10000, Calendar.FEBRUARY, 1).getTime();
         return taskPointMapper.toDto(
-                taskPointRepository.findAllWithFilters(taskId, completed, searchStr, createdDateBegin, createdDateEnd, pageable)
+                taskPointRepository.findAllWithFilters(taskId, completed, searchStr, createdDateBegin != null,
+                        createdDateBegin, createdDateEnd != null, createdDateEnd, pageable)
         );
     }
 

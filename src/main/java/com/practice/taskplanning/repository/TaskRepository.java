@@ -17,7 +17,9 @@ public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
             "   and (:assignedUserId is null or user.id = :assignedUserId)" +
             "   and (:assignedTeamId is null  or team.id = :assignedTeamId)" +
             "   and (:searchStr is null or task.name like %:searchStr% or task.description like %:searchStr%)" +
-            "   and (task.createdDate between :createdDateBegin and :createdDateEnd)")
+            "   and (:hasCreatedDateBegin = false or task.createdDate >= :createdDateBegin)" +
+            "   and (:hasCreatedDateEnd = false or task.createdDate <= :createdDateEnd)")
     Page<Task> findAllWithFilters(Status status, Long assignedUserId, Long assignedTeamId,
-                                  String searchStr, Date createdDateBegin, Date createdDateEnd, Pageable pageable);
+                                  String searchStr, boolean hasCreatedDateBegin, Date createdDateBegin,
+                                  boolean hasCreatedDateEnd, Date createdDateEnd, Pageable pageable);
 }
