@@ -3,7 +3,6 @@ package com.practice.taskplanning.datasetup;
 import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.model.user.RoleEntity;
 import com.practice.taskplanning.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 public class RoleSetUp implements DataSetUp {
     private final RoleRepository roleRepository;
 
-    @Autowired
     public RoleSetUp(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }

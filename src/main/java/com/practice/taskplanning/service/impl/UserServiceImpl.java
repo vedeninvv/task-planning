@@ -10,7 +10,6 @@ import com.practice.taskplanning.model.user.Role;
 import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.UserRepository;
 import com.practice.taskplanning.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
                            PasswordEncoder passwordEncoder) {

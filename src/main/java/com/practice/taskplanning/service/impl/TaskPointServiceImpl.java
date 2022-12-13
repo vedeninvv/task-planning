@@ -14,7 +14,6 @@ import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import com.practice.taskplanning.service.TaskPointService;
 import com.practice.taskplanning.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +29,6 @@ public class TaskPointServiceImpl implements TaskPointService {
     private final TaskService taskService;
     private final TaskPointMapper taskPointMapper;
 
-    @Autowired
     public TaskPointServiceImpl(TaskPointRepository taskPointRepository, TaskRepository taskRepository, TaskService taskService, TaskPointMapper taskPointMapper) {
         this.taskPointRepository = taskPointRepository;
         this.taskRepository = taskRepository;

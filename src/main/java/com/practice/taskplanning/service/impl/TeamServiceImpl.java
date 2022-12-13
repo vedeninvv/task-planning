@@ -10,7 +10,6 @@ import com.practice.taskplanning.model.user.UserEntity;
 import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import com.practice.taskplanning.service.TeamService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -24,7 +23,6 @@ public class TeamServiceImpl implements TeamService {
     private final UserRepository userRepository;
     private final TeamMapper teamMapper;
 
-    @Autowired
     public TeamServiceImpl(TeamRepository teamRepository, UserRepository userRepository, TeamMapper teamMapper) {
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;

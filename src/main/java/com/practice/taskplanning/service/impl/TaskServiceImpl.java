@@ -16,7 +16,6 @@ import com.practice.taskplanning.repository.TeamRepository;
 import com.practice.taskplanning.repository.UserRepository;
 import com.practice.taskplanning.service.TaskService;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +38,6 @@ public class TaskServiceImpl implements TaskService {
     private final TaskPointRepository taskPointRepository;
     private final TaskMapper taskMapper;
 
-    @Autowired
     public TaskServiceImpl(TaskRepository taskRepository,
                            UserRepository userRepository,
                            TeamRepository teamRepository,
