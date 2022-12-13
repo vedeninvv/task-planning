@@ -114,6 +114,14 @@ public class TaskController {
         taskService.deleteTaskById(taskId);
     }
 
+    @Operation(summary = "Assign user to task", security = @SecurityRequirement(name = "basicAuth"),
+    description = "Admins can assign to task all users. Users can assign only themselves")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User was assigned to task"),
+            @ApiResponse(responseCode = "404", description = "Task or user not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not admin or attempt to assign to task not himself", content = @Content)
+    })
     @PreAuthorize("hasAuthority('assign_to_task:all') or (hasAuthority('assign_to_task:self') and #user.id == #userId)")
     @PostMapping("/{taskId}/assigned-users/{userId}")
     public TaskGetDto assignUserToTask(@PathVariable Long taskId,
@@ -122,12 +130,27 @@ public class TaskController {
         return taskService.assignUserToTask(taskId, userId);
     }
 
+    @Operation(summary = "Assign executors to task", security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Executors was assigned to task"),
+            @ApiResponse(responseCode = "404", description = "Task not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Don't have permission to assign all executors", content = @Content)
+    })
     @PreAuthorize("hasAuthority('assign_to_task:all')")
     @PostMapping("/{taskId}/assigne-executors")
     public TaskGetDto assignToTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
         return taskService.assignToTask(taskId, taskExecutorsDto);
     }
 
+    @Operation(summary = "Remove user from task", security = @SecurityRequirement(name = "basicAuth"),
+            description = "Admins can remove from task all users. Users can remove only themselves")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User was removed from task"),
+            @ApiResponse(responseCode = "404", description = "Task or user not found. Or user not found among assigned users", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not admin or attempt to remove from task not himself", content = @Content)
+    })
     @PreAuthorize("hasAuthority('remove_from_task:all') or (hasAuthority('remove_from_task:self') and #user.id == #userId)")
     @DeleteMapping("/{taskId}/assigned-users/{userId}")
     public TaskGetDto removeUserFromTask(@PathVariable Long taskId,
@@ -136,6 +159,13 @@ public class TaskController {
         return taskService.removeUserFromTask(taskId, userId);
     }
 
+    @Operation(summary = "Remove executors from task", security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Executors was removed from task"),
+            @ApiResponse(responseCode = "404", description = "Task not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id isn't number", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Don't have permission to remove all executors", content = @Content)
+    })
     @PreAuthorize("hasAuthority('remove_from_task:all')")
     @DeleteMapping("/{taskId}/remove-executors")
     public TaskGetDto removeFromTask(@PathVariable Long taskId, @RequestBody TaskExecutorsDto taskExecutorsDto) {
