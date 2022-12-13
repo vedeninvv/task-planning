@@ -1,5 +1,6 @@
 package com.practice.taskplanning.security;
 
+import com.practice.taskplanning.config.OpenAPIConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api").permitAll()
+                        .antMatchers(OpenAPIConfiguration.SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .logout(LogoutConfigurer::permitAll)
                 .httpBasic(Customizer.withDefaults())
