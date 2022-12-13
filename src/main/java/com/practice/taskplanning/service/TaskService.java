@@ -8,6 +8,7 @@ import com.practice.taskplanning.mapper.TaskMapper;
 import com.practice.taskplanning.model.TaskPoint;
 import com.practice.taskplanning.model.task.Status;
 import com.practice.taskplanning.model.task.Task;
+import com.practice.taskplanning.model.user.AppUser;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import com.practice.taskplanning.repository.TeamRepository;
@@ -155,5 +156,11 @@ public class TaskService {
         } else {
             return Status.LATE_COMPLETED;
         }
+    }
+
+    public boolean isUserAssignedToTask(AppUser user, Task task) {
+        boolean isAssignedUser = task.getAssignedUsers().contains(user);
+        boolean inAssignedTeam = task.getAssignedTeams().stream().anyMatch(team -> team.getMembers().contains(user));
+        return isAssignedUser || inAssignedTeam;
     }
 }

@@ -3,6 +3,7 @@ package com.practice.taskplanning.controller;
 import com.practice.taskplanning.dto.taskPoint.TaskPointGetDto;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPatchDto;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
+import com.practice.taskplanning.model.user.AppUser;
 import com.practice.taskplanning.service.TaskPointService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -107,5 +109,19 @@ public class TaskPointController {
     @DeleteMapping("/task-points/{taskPointId}")
     public void deleteTaskPoint(@PathVariable Long taskPointId) {
         taskPointService.deleteTaskPoint(taskPointId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('complete_task_point:assigned', 'complete_task_point:all')")
+    @PostMapping("/task-points/{taskPointId}/complete")
+    public TaskPointGetDto completeTaskPoint(@PathVariable Long taskPointId,
+                                             @AuthenticationPrincipal AppUser user) {
+        return taskPointService.completeTaskPoint(user, taskPointId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('rollback_task_point:assigned', 'rollback_task_point:all')")
+    @PostMapping("/task-points/{taskPointId}/rollback-complete")
+    public TaskPointGetDto rollbackTaskPoint(@PathVariable Long taskPointId,
+                                             @AuthenticationPrincipal AppUser user) {
+        return taskPointService.rollbackTaskPoint(user, taskPointId);
     }
 }

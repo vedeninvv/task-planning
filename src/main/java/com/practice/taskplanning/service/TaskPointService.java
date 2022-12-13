@@ -4,13 +4,17 @@ import com.practice.taskplanning.dto.taskPoint.TaskPointGetDto;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPatchDto;
 import com.practice.taskplanning.dto.taskPoint.TaskPointPostDto;
 import com.practice.taskplanning.exception.NotFoundException;
+import com.practice.taskplanning.exception.UserNotAssigned;
 import com.practice.taskplanning.mapper.TaskPointMapper;
 import com.practice.taskplanning.model.TaskPoint;
 import com.practice.taskplanning.model.task.Task;
+import com.practice.taskplanning.model.user.AppUser;
+import com.practice.taskplanning.model.user.Permission;
 import com.practice.taskplanning.repository.TaskPointRepository;
 import com.practice.taskplanning.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -81,5 +85,58 @@ public class TaskPointService {
         });
         taskPointRepository.delete(taskPoint);
         taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, new Date());
+    }
+
+    public TaskPointGetDto completeTaskPoint(AppUser user, Long taskPointId) {
+        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to complete taskPoint", taskPointId));
+        });
+        if (hasAccessToComplete(user, taskPoint)) {
+            Date currentDate = new Date();
+            taskPoint.setCompletedDate(currentDate);
+            taskPoint.setCompleted(true);
+            taskPoint = taskPointRepository.save(taskPoint);
+            taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, currentDate);
+            return taskPointMapper.toDto(taskPoint);
+        } else {
+            throw new UserNotAssigned(
+                    String.format("User with id '%d' not assigned to task '%d' to complete taskPoint with id '%d'",
+                            user.getId(), taskPoint.getTask().getId(), taskPointId)
+            );
+        }
+    }
+
+    public boolean hasAccessToComplete(AppUser user, TaskPoint taskPoint) {
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority(Permission.COMPLETE_ALL_TASK_POINT.getPermission()))) {
+            return true;
+        } else {
+            return taskService.isUserAssignedToTask(user, taskPoint.getTask());
+        }
+    }
+
+    public TaskPointGetDto rollbackTaskPoint(AppUser user, Long taskPointId) {
+        TaskPoint taskPoint = taskPointRepository.findById(taskPointId).orElseThrow(() -> {
+            throw new NotFoundException(String.format("TaskPoint not found with id '%d' when try to rollback taskPoint", taskPointId));
+        });
+        if (hasAccessToRollback(user, taskPoint)) {
+            taskPoint.setCompletedDate(null);
+            taskPoint.setCompleted(false);
+            taskPoint = taskPointRepository.save(taskPoint);
+            taskService.updateTaskStatusWhenTaskPointsChanged(taskPoint, new Date());
+            return taskPointMapper.toDto(taskPoint);
+        } else {
+            throw new UserNotAssigned(
+                    String.format("User with id '%d' not assigned to task '%d' to rollback taskPoint with id '%d'",
+                            user.getId(), taskPoint.getTask().getId(), taskPointId)
+            );
+        }
+    }
+
+    public boolean hasAccessToRollback(AppUser user, TaskPoint taskPoint) {
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority(Permission.ROLLBACK_ALL_TASK_POINT.getPermission()))) {
+            return true;
+        } else {
+            return taskService.isUserAssignedToTask(user, taskPoint.getTask());
+        }
     }
 }
