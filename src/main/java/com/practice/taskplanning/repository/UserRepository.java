@@ -20,7 +20,8 @@ public interface UserRepository extends PagingAndSortingRepository<AppUser, Long
 
     /**
      * Находит всех пользователей, имеющих переданную роль
-     * @param role роль
+     *
+     * @param role     роль
      * @param pageable условия пагинации
      * @return Page пользователей
      */

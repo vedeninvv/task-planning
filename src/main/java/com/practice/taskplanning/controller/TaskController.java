@@ -115,7 +115,7 @@ public class TaskController {
     }
 
     @Operation(summary = "Assign user to task", security = @SecurityRequirement(name = "basicAuth"),
-    description = "Admins can assign to task all users. Users can assign only themselves")
+            description = "Admins can assign to task all users. Users can assign only themselves")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User was assigned to task"),
             @ApiResponse(responseCode = "404", description = "Task or user not found", content = @Content),

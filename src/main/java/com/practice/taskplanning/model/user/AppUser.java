@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -44,6 +46,7 @@ public class AppUser implements UserDetails {
 
     /**
      * Получить разрешения пользователя в зависимости от его ролей
+     *
      * @return коллекция разрешений
      */
     @Override
