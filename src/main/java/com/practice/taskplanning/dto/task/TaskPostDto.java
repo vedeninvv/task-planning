@@ -29,7 +29,6 @@ public class TaskPostDto {
     /**
      * Крайний срок выполнения задания
      */
-    @Future
     private Date deadline;
 
     /**
