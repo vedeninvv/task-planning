@@ -107,8 +107,7 @@ public class TaskServiceImpl implements TaskService {
             task.setAssignedTeams(teamRepository.findAllByIdIn(taskPatchDto.getAssignedTeamsIds()));
         }
         if (taskPatchDto.getTaskPointsIds() != null) {
-            task.getTaskPoints().clear();
-            task.getTaskPoints().addAll(taskPointRepository.findAllByIdIn(taskPatchDto.getTaskPointsIds()));
+            task.getTaskPoints().retainAll(taskPointRepository.findAllByIdIn(taskPatchDto.getTaskPointsIds()));
         }
 
         changeStatusIfNecessary(task, new Date());
