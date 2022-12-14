@@ -93,6 +93,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException(String.format("User with id '%d' not found when try to delete user", userId));
         });
+        user.getTeams().forEach(team -> team.getMembers().remove(user));
+        user.getTasksAssignedTo().forEach(task -> task.getAssignedUsers().remove(user));
         userRepository.delete(user);
         return userMapper.toDto(user);
     }

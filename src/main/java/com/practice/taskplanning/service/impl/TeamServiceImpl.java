@@ -77,7 +77,9 @@ public class TeamServiceImpl implements TeamService {
         TeamEntity team = teamRepository.findById(teamId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Team with id '%d' not found when try to delete", teamId));
         });
+        TeamGetDto teamGetDto = teamMapper.toDto(team);
+        team.getTasksAssignedTo().forEach(task -> task.getAssignedTeams().remove(team));
         teamRepository.delete(team);
-        return teamMapper.toDto(team);
+        return teamGetDto;
     }
 }

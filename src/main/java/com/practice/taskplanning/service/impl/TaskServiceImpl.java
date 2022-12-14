@@ -120,8 +120,9 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(() -> {
             throw new NotFoundException(String.format("Task with id '%d' not found when try to delete task", taskId));
         });
+        TaskGetDto taskGetDto = taskMapper.toDto(task);
         taskRepository.delete(task);
-        return taskMapper.toDto(task);
+        return taskGetDto;
     }
 
     public TaskGetDto assignUserToTask(Long taskId, Long userId) {
