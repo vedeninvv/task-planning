@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: 'task-planning-postgres'
+    image: 'postgres:15-alpine'
+    environment:
+      - 'POSTGRES_USER=${DATABASE_USER}'
+      - 'POSTGRES_PASSWORD=${DATABASE_PASSWORD}'
+      - 'POSTGRES_DB=${DATABASE_NAME}'
+
+  app:
+    build: ./
+    container_name: 'task-planning'
+    ports:
+      - '${PORT}:${PORT}'
+    environment:
+      - 'DATABASE_URL=jdbc:postgresql://postgres:5432/${DATABASE_NAME}'
+      - 'DATABASE_USER=${DATABASE_USER}'
+      - 'DATABASE_PASSWORD=${DATABASE_PASSWORD}'
+      - 'PORT=${PORT}'
