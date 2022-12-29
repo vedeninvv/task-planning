@@ -80,7 +80,7 @@ Bakend-часть сервиса планирования заданий для 
 3. Изменить docker-compose для использования скаченного image:
 
        app:
-       image: 'vedeninvv/task-planning-app'
+           image: 'vedeninvv/task-planning-app'
 
 4. Определить переменные окружения, аналогично способу выше. Например, при помощи .env файла:
 
